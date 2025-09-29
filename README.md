@@ -29,6 +29,14 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY(flight_id) REFERENCES flights(flight_id)
 );
 ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
+INSERT INTO users (username, password, full_name, email, role)
+VALUES (
+    'admin', 
+    '$2a$10$wE3o3dLjN9ZfZj2eqZt/4eE7R1ZcVJg5oGssN3a9Qafpc5D/3uV5W', 
+    'Administrator', 
+    'admin@example.com', 
+    'admin'
+);
 
 
 -- Sample flights
