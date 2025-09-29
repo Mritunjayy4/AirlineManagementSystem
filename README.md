@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY(user_id) REFERENCES users(user_id),
     FOREIGN KEY(flight_id) REFERENCES flights(flight_id)
 );
+ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
+
 
 -- Sample flights
 INSERT INTO flights (flight_number, source, destination, departure_time, arrival_time, available_seats, price)
