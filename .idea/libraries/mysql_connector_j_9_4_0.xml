@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="mysql-connector-j-9.4.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../mysql-connector-j-9.4.0/mysql-connector-j-9.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../itextpdf-5.5.13.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../jbcrypt-0.4.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/itextpdf-5.5.13.3.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jbcrypt-0.4.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/mysql-connector-j-9.4.0/mysql-connector-j-9.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
