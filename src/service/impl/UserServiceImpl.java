@@ -1,4 +1,5 @@
- package service.impl;
+
+package service.impl;
 import model.LoggedInUser;
 import service.UserService;
 import util.DBConnection;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 String storedHash = rs.getString("password");
                 String role = rs.getString("role");
 
-                // Quick fix: bypass hash check if username is admin
+                // bypass hash check if username is admin
                 if ("admin".equalsIgnoreCase(user) && "admin@123".equals(password)) {
                     JOptionPane.showMessageDialog(null, "Welcome Admin!");
                     return new LoggedInUser(rs.getInt("user_id"), role, rs.getString("full_name"));
@@ -62,7 +63,37 @@ public class UserServiceImpl implements UserService {
             String password = "";
             boolean passwordValid = false;
             String name = JOptionPane.showInputDialog(null, "Enter full name:");
-            String email = JOptionPane.showInputDialog(null, "Enter email:");
+            String email = "";
+            while (true) {
+                email = JOptionPane.showInputDialog(null, "Enter email:");
+                if (email == null || email.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Email cannot be empty!");
+                    continue; // ask again
+                }
+                if (!email.contains("@")) {
+                    JOptionPane.showMessageDialog(null, "Invalid email! Must contain '@'.");
+                    continue; // ask again
+                }
+                break; // valid email, exit loop
+            }
+            String Aadhaar="";
+            boolean flag=true;
+            while(flag) {
+              Aadhaar= JOptionPane.showInputDialog(null, "Enter AADHAAR Number");
+              if(Aadhaar.matches("[0-9]+") && Aadhaar.length()==12)
+              {
+                  flag=false;
+              }
+              else
+              {
+                  JOptionPane.showMessageDialog(null,"INVALID AADHAR NUMBER");
+              }
+
+
+            }
+
+
+
 
             while (!passwordValid) {
                 password = readPassword("Enter password (Min 8 chars, incl. special character) or CANCEL to exit:");
@@ -127,11 +158,17 @@ public class UserServiceImpl implements UserService {
                 JOptionPane.showMessageDialog(null, "Username cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
+            if(!(u.length() >=6 && u.matches("[a-zA-Z0-9]+")))
+            {
+                JOptionPane.showMessageDialog(null,"Username must be atleast 6 characters and should contain only alphanumerics","Error",JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
             if (usernameExists(conn, u)) {
                 JOptionPane.showMessageDialog(null, "Username already exists. Try another.", "Taken",
                         JOptionPane.WARNING_MESSAGE);
                 continue;
             }
+
             return u;
         }
     }
@@ -156,7 +193,6 @@ public class UserServiceImpl implements UserService {
 
     private boolean userCancelledDialog = false;
     private boolean didUserCancel() {
-        return userCancelledDialog;
-    }
+         return userCancelledDialog;
+     }
 }
-

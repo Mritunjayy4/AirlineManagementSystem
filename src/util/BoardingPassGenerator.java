@@ -1,9 +1,9 @@
 package util;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.*; //Imports iText classes (Document, Font, Paragraph, etc.).
+import com.itextpdf.text.pdf.PdfWriter; //Used to write PDF content to a file.
 
-import java.io.FileOutputStream;
+import java.io.FileOutputStream; //Writes the generated PDF to a file on disk.
 
 public class BoardingPassGenerator {
 
@@ -12,7 +12,9 @@ public class BoardingPassGenerator {
                                             String departureTime, String arrivalTime, int seatsBooked,
                                             double totalAmount) {
         try {
-            Document document = new Document();
+            Document document = new Document(); //iText Document object → represents the PDF.
+            //PDG WRITER class in itext pdf handles all the PDF formatting and writing.
+            //File Output stream is just the target file where bytes are stored
             PdfWriter.getInstance(document, new FileOutputStream(fileName));
             document.open();
 

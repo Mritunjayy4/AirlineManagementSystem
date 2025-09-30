@@ -9,8 +9,29 @@ public class AdminServiceImpl {
     /** Add a new flight */
     public void addFlight(Scanner scanner) {
         try (Connection conn = DBConnection.getConnection()) {
-            System.out.print("Enter flight number: ");
-            String flightNumber = scanner.nextLine();
+
+       boolean flag=true;
+       String flightNumber = "";
+            while(flag)
+            {
+                System.out.print("Enter flight number: ");
+                flightNumber = scanner.nextLine();
+           String sql="SELECT 1 FROM flights WHERE flight_number=? LIMIT 1"; //unique flight number
+            try(PreparedStatement ps=conn.prepareStatement(sql))
+            {
+                ps.setString(1,flightNumber);
+                try(ResultSet rs=ps.executeQuery())
+                {
+                    if(rs.next())
+                    {
+                        System.out.println("This Flight Number already exists");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            } }
 
             System.out.print("Enter source: ");
             String source = scanner.nextLine();

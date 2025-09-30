@@ -5,19 +5,22 @@ import service.impl.*;
 import java.util.Scanner;
 
 public class AirlineApp {
+    //The Facade design pattern in Java provides a simplified interface to a complex subsystem.
+    // It is a structural design pattern that aims to hide the complexities of a system from its clients,
+    // making it easier to use and reducing dependencies.
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        UserServiceImpl userService = new UserServiceImpl();
-        ViewServiceImpl viewService = new ViewServiceImpl();
-        BookingServiceImpl bookingService = new BookingServiceImpl();
-        CancelServiceImpl cancelService = new CancelServiceImpl();
-        AdminServiceImpl adminService = new AdminServiceImpl(); // new service for admin ops
+        UserServiceImpl userService = new UserServiceImpl(); //login and register
+        ViewServiceImpl viewService = new ViewServiceImpl(); //view flight status and availiable flights
+        BookingServiceImpl bookingService = new BookingServiceImpl(); //Book tickets
+        CancelServiceImpl cancelService = new CancelServiceImpl(); //Cancel tickets
+        AdminServiceImpl adminService = new AdminServiceImpl(); // Service for admin ops like add flight,change status
 
         System.out.println("=== Welcome to Flight Management System ===");
-        LoggedInUser currentUser = null;
+        LoggedInUser currentUser = null;//Represents currently logged in user and stores their role and ID.
 
         while (true) {
-            if (currentUser == null) {
+            if (currentUser == null) { //no user logged in
                 System.out.println("\n1. Register\n2. Login\n3. Exit");
                 int choice = scanner.nextInt();
                 scanner.nextLine();

@@ -10,11 +10,11 @@ public class ViewServiceImpl {
         viewFlightsWithStatus();
     }
 
-    public void viewFlightsWithStatus() {
+    private void viewFlightsWithStatus() { //PRIVATE
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT flight_number, source, destination, departure_time, arrival_time, available_seats, price, status FROM flights";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            Statement st = conn.createStatement(); //Creates a Statement object → used to send SQL queries to the DB.
+            ResultSet rs = st.executeQuery(sql); //contains rows returned from DB.
             System.out.println("FlightNo | From → To | DepTime | ArrTime | Seats | Price | Status");
             while (rs.next()) {
                 String fn = rs.getString("flight_number");
@@ -32,14 +32,16 @@ public class ViewServiceImpl {
             e.printStackTrace();
         }
     }
-
     public void checkFlightStatus(Scanner scanner) {
         System.out.print("Enter flight number: ");
         String flightNumber = scanner.nextLine();
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT flight_number, departure_time, status FROM flights WHERE flight_number = ?";
+          /* Advantage of prepared statement
+           Prevents SQL injection (DB treats user input as data, not as SQL code).
+           Faster if reused multiple times (compiled once, executed many). */
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, flightNumber);
+            ps.setString(1, flightNumber); //basically column index 1 will be flightNumber
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 System.out.println("Flight " + rs.getString("flight_number") +
