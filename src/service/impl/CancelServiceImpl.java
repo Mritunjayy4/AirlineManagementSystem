@@ -36,6 +36,7 @@ public class CancelServiceImpl implements CancelService {
 
                 if (confirm.equalsIgnoreCase("yes")) {
                     conn.setAutoCommit(false);
+                   // Don’t commit automatically after each statement — I’ll decide when to commit.”
 
                     // Cancel the booking
                     PreparedStatement cancel = conn.prepareStatement(

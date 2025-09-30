@@ -1,4 +1,5 @@
- package service.impl;
+
+package service.impl;
 import model.LoggedInUser;
 import service.UserService;
 import util.DBConnection;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 String storedHash = rs.getString("password");
                 String role = rs.getString("role");
 
-                // Quick fix: bypass hash check if username is admin
+                // bypass hash check if username is admin
                 if ("admin".equalsIgnoreCase(user) && "admin@123".equals(password)) {
                     JOptionPane.showMessageDialog(null, "Welcome Admin!");
                     return new LoggedInUser(rs.getInt("user_id"), role, rs.getString("full_name"));
@@ -56,13 +57,43 @@ public class UserServiceImpl implements UserService {
     public void register(Scanner scanner) {
         try (Connection conn = DBConnection.getConnection()) {
 
-            String username = promptUsernameUnique(conn);
+            String username = promptUsernameUnique(conn); //UNIQUE USER NAME HELPER FUNCTION
             if (username == null) return;
 
             String password = "";
             boolean passwordValid = false;
-            String name = JOptionPane.showInputDialog(null, "Enter full name:");
-            String email = JOptionPane.showInputDialog(null, "Enter email:");
+            String name = JOptionPane.showInputDialog(null, "Enter full name:"); //full name
+            String email = "";
+            while (true) {
+                email = JOptionPane.showInputDialog(null, "Enter email:");
+                if (email == null || email.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Email cannot be empty!");
+                    continue; // ask again
+                }
+                if (!email.contains("@")) {
+                    JOptionPane.showMessageDialog(null, "Invalid email! Must contain '@'.");
+                    continue; // ask again
+                }
+                break; // valid email, exit loop
+            }
+            String Aadhaar="";
+            boolean flag=true;
+            while(flag) {
+              Aadhaar= JOptionPane.showInputDialog(null, "Enter AADHAAR Number");
+              if(Aadhaar.matches("[0-9]+") && Aadhaar.length()==12)
+              {
+                  flag=false;
+              }
+              else
+              {
+                  JOptionPane.showMessageDialog(null,"INVALID AADHAR NUMBER");
+              }
+
+
+            }
+
+
+
 
             while (!passwordValid) {
                 password = readPassword("Enter password (Min 8 chars, incl. special character) or CANCEL to exit:");
@@ -84,6 +115,7 @@ public class UserServiceImpl implements UserService {
             }
 
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+          //  The salt ensures that even if two users have the same password, their stored hash will be different.
 
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO users(username, password, full_name, email, role) VALUES (?,?,?,?,?)");
@@ -105,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     /** Utility to securely read password */
     private String readPassword(String prompt) {
-        JPasswordField pf = new JPasswordField();
+        JPasswordField pf = new JPasswordField(); //dots ayenge passwrod me this is not the dialogbox
         int okCxl = JOptionPane.showConfirmDialog(
                 null, pf, prompt, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
@@ -120,11 +152,16 @@ public class UserServiceImpl implements UserService {
     /** Keep asking until a non-empty unique username is entered */
     private String promptUsernameUnique(Connection conn) throws SQLException {
         while (true) {
-            String u = JOptionPane.showInputDialog(null, "Enter username:", "Register", JOptionPane.QUESTION_MESSAGE);
-            if (u == null) return null; // user cancelled
+            String u = JOptionPane.showInputDialog(null, "Enter username:", "Register", JOptionPane.QUESTION_MESSAGE); //QUESTION MESSAGE OK CANCEL
+            if (u == null) return null; // IF user cancelled
             u = u.trim();
             if (u.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Username cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+            if(!(u.length() >=6 && u.matches("[a-zA-Z0-9]+")))
+            {
+                JOptionPane.showMessageDialog(null,"Username must be atleast 6 characters and should contain only alphanumerics","Error",JOptionPane.ERROR_MESSAGE);
                 continue;
             }
             if (usernameExists(conn, u)) {
@@ -132,6 +169,7 @@ public class UserServiceImpl implements UserService {
                         JOptionPane.WARNING_MESSAGE);
                 continue;
             }
+
             return u;
         }
     }
@@ -148,7 +186,7 @@ public class UserServiceImpl implements UserService {
         String sql = "SELECT 1 FROM users WHERE LOWER(username) = LOWER(?) LIMIT 1";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
-            try (ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) { //fetches row
                 return rs.next();
             }
         }
@@ -156,7 +194,6 @@ public class UserServiceImpl implements UserService {
 
     private boolean userCancelledDialog = false;
     private boolean didUserCancel() {
-        return userCancelledDialog;
-    }
+         return userCancelledDialog;
+     }
 }
-
