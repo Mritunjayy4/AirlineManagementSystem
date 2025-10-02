@@ -1,12 +1,20 @@
-LIBRARY TO INSTALL : MYSQL Connector Jar 9.4.0
-                     JBCrypt for hashing the password
-                     itextpdf jar file for boarding pass generation
+## Required Libraries
+Make sure you have the following JAR files added to your project (e.g., in IntelliJ or your `lib` folder):
 
+1. **MySQL Connector JAR** (v9.4.0) – for database connectivity  
+2. **JBCrypt** – for hashing passwords securely  
+3. **iTextPDF JAR** – for generating boarding passes  
 
-SAMPLE DATABASE YOU CAN SET UP:
+---
 
+## Sample Database Setup
+
+```sql
+-- Create the database
 CREATE DATABASE IF NOT EXISTS airline_db;
 USE airline_db;
+
+-- Users table
 CREATE TABLE IF NOT EXISTS users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -14,6 +22,8 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL
 );
+
+-- Flights table
 CREATE TABLE IF NOT EXISTS flights (
     flight_id INT PRIMARY KEY AUTO_INCREMENT,
     flight_number VARCHAR(20) UNIQUE NOT NULL,
@@ -24,6 +34,8 @@ CREATE TABLE IF NOT EXISTS flights (
     available_seats INT NOT NULL,
     price DECIMAL(10,2) NOT NULL
 );
+
+-- Bookings table
 CREATE TABLE IF NOT EXISTS bookings (
     booking_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
@@ -35,11 +47,12 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY(user_id) REFERENCES users(user_id),
     FOREIGN KEY(flight_id) REFERENCES flights(flight_id)
 );
+
+-- Add extra columns
 ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
-ALTER TABLE flights
-ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ON_TIME';
+ALTER TABLE flights ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ON_TIME';
 
-
+-- Insert Admin User (password: admin@123)
 INSERT INTO users (username, password, full_name, email, role)
 VALUES (
     'admin', 
@@ -49,8 +62,7 @@ VALUES (
     'admin'
 );
 
-
--- Sample flights
+-- Insert Sample Flights
 INSERT INTO flights (flight_number, source, destination, departure_time, arrival_time, available_seats, price)
 VALUES 
 ('AI101','Delhi','Mumbai','2024-12-25 08:00:00','2024-12-25 10:30:00',150,5500.00),
