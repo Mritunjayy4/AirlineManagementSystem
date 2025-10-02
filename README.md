@@ -1,3 +1,10 @@
+LIBRARY TO INSTALL : MYSQL Connector Jar 9.4.0
+                     JBCrypt for hashing the password
+                     itextpdf jar file for boarding pass generation
+
+
+SAMPLE DATABASE YOU CAN SET UP:
+
 CREATE DATABASE IF NOT EXISTS airline_db;
 USE airline_db;
 CREATE TABLE IF NOT EXISTS users (
